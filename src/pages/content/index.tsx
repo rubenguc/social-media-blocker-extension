@@ -1,20 +1,65 @@
-import { createRoot } from 'react-dom/client';
-import './style.css' 
-const div = document.createElement('div');
-div.id = '__root';
-document.body.appendChild(div);
+import { createRoot } from "react-dom/client"
+import Browser from "webextension-polyfill"
+// import cheems from "./stop-cheems.png"
 
-const rootContainer = document.querySelector('#__root');
-if (!rootContainer) throw new Error("Can't find Options root element");
-const root = createRoot(rootContainer);
-root.render(
-  <div className='absolute bottom-0 left-0 text-lg text-black bg-amber-400 z-50'  >
-    content script loaded
-  </div>
-);
+const injectMessageScreen = () => {
+  document.body.innerHTML = ""
 
-try {
-  console.log('content script loaded');
-} catch (e) {
-  console.error(e);
+  const div = document.createElement('div');
+  div.id = '__root';
+  document.body.appendChild(div);
+  const rootContainer = document.querySelector('#__root');
+  if (!rootContainer) throw new Error("Can't find Options root element");
+  const root = createRoot(rootContainer);
+
+  // inject css
+  const style = document.createElement('style');
+  style.innerHTML = `
+    html, body, #__root {
+      height: 100%;
+      min-height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  `
+
+  document.body.appendChild(style);
+
+  // const rootPath = Browser.runtime.getURL('')
+
+  root.render(
+
+    <div >
+      <p style={{
+        fontSize: '2rem',
+        fontWeight: 'bold',
+
+      }}>
+
+        Page blocked by extension
+      </p>
+      {/* <img src={`${rootPath}icon-128.png`} width={200} height={2000} alt="" /> */}
+    </div>
+  );
 }
+
+
+
+const init = async () => {
+  try {
+    const response = await Browser.runtime.sendMessage({
+      message: 'get-blocked-social-medias-domains'
+    })
+    const blockedDomains = response.blockedDomains || []
+    const host = window.location.host.split('.').slice(-2).join('.')
+    const hostIsBlocked = blockedDomains.includes(host)
+
+    if (hostIsBlocked) injectMessageScreen()
+  } catch (error) {
+    console.log(error)
+  }
+
+}
+
+init()
