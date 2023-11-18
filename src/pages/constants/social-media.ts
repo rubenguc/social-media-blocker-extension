@@ -44,4 +44,8 @@ export const SOCIAL_MEDIA: SocialMedia[] = [
     name: "whatsapp",
     domains: ["whatsapp.com"],
   },
+  {
+    name: "twitch",
+    domains: ["twitch.tv"],
+  },
 ];

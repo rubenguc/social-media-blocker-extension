@@ -22,6 +22,10 @@ const injectMessageScreen = () => {
       justify-content: center;
       align-items: center;
     }
+
+    body {
+      background-color: #fff !important;
+    }
   `
 
   document.body.appendChild(style);

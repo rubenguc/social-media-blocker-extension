@@ -36,7 +36,6 @@ Browser.runtime.onMessage.addListener(
       default:
         break;
     }
-    console.log("return true");
     return true;
   }
 );
@@ -70,10 +69,6 @@ const getBlockedSocialMediasDomains = async () => {
 const toggleSocialMedia = async (socialMediaName: string) => {
   const socialMedia = await Browser.storage.local.get(socialMediaName);
 
-  console.log("found", {
-    f: socialMedia[socialMediaName],
-  });
-
   if (socialMedia) {
     await Browser.storage.local.set({
       [socialMediaName]: {
@@ -87,8 +82,6 @@ const toggleSocialMedia = async (socialMediaName: string) => {
 const init = async () => {
   const storage = await Browser.storage.local.get();
   const isEmpty = Object.keys(storage).length === 0;
-
-  console.log(storage);
 
   if (isEmpty) {
     const toSave: { [key: string]: { isBlocked: boolean; domains: string[] } } =
