@@ -19,7 +19,6 @@ Browser.runtime.onMessage.addListener(
 
       case "get-blocked-social-medias-domains": {
         const blockedDomains = await getBlockedSocialMediasDomains();
-
         return {
           blockedDomains,
         };
@@ -28,6 +27,14 @@ Browser.runtime.onMessage.addListener(
       case "toggle-social-media": {
         const { socialMediaName } = params;
         await toggleSocialMedia(socialMediaName);
+        return {
+          ok: true,
+        };
+      }
+
+      case "toggle-all-social-medias": {
+        const { isBlockedAll } = params;
+        await toggleAllSocialMedias(isBlockedAll);
         return {
           ok: true,
         };
@@ -77,6 +84,20 @@ const toggleSocialMedia = async (socialMediaName: string) => {
       },
     });
   }
+};
+
+const toggleAllSocialMedias = async (isBlockedAll: boolean) => {
+  const socialMedias = await Browser.storage.local.get();
+  const socialMediasNames = Object.keys(socialMedias);
+
+  socialMediasNames.forEach(async (socialMediaName) => {
+    await Browser.storage.local.set({
+      [socialMediaName]: {
+        ...socialMedias[socialMediaName],
+        isBlocked: isBlockedAll ? false : true,
+      },
+    });
+  });
 };
 
 const init = async () => {

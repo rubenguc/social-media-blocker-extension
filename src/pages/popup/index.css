@@ -9,4 +9,5 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   position: relative;
+  background-color: rgb(31 41 55);
 }

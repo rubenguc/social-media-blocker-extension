@@ -1,6 +1,5 @@
 import { createRoot } from "react-dom/client"
 import Browser from "webextension-polyfill"
-// import cheems from "./stop-cheems.png"
 
 const injectMessageScreen = () => {
   document.body.innerHTML = ""
@@ -24,7 +23,8 @@ const injectMessageScreen = () => {
     }
 
     body {
-      background-color: #fff !important;
+      background-color: rgb(31 41 55) !important;
+      text-color: white;
     }
   `
 
